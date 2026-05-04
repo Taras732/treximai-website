@@ -28,7 +28,7 @@ const a = tr.about;
       </h1>
       <p class="mt-6 text-[18px] leading-[27px] text-white/90">{a.hero.sub}</p>
       <div class="mt-8">
-        <Button href="#contact" variant="primary" size="lg">{a.hero.cta}</Button>
+        <Button modalTrigger="about-hero" variant="primary" size="lg">{a.hero.cta}</Button>
       </div>
     </div>
   </section>
@@ -39,8 +39,8 @@ const a = tr.about;
       <span class="inline-block rounded-full border border-brand-orange px-4 py-1.5 text-[14px] font-medium text-brand-orange">
         {a.vision.chip}
       </span>
-      <div class="mt-8 max-w-[960px] space-y-4 text-[24px] leading-[1.42] text-neutral-900 lg:text-[32px] lg:leading-[42px] font-semibold">
-        {a.vision.body.map((p) => <p>{p}</p>)}
+      <div class="mt-8 max-w-[960px] space-y-4 text-[24px] leading-[1.42] lg:text-[32px] lg:leading-[42px] font-semibold">
+        {a.vision.body.map((p) => <p class="vision-reveal">{p}</p>)}
       </div>
       <div class="mt-12 grid grid-cols-1 gap-px bg-neutral-200 md:grid-cols-3">
         {a.vision.stats.map((s) => (
@@ -89,7 +89,7 @@ const a = tr.about;
       </h2>
       <p class="mt-4 text-[16px] leading-[24px] text-neutral-500">{a.cta.sub}</p>
       <div class="mt-6">
-        <Button href="/contacts" variant="primary" size="lg">{a.cta.button}</Button>
+        <Button modalTrigger="about-cta" variant="primary" size="lg">{a.cta.button}</Button>
       </div>
     </div>
   </section>

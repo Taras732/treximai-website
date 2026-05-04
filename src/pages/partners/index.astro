@@ -23,7 +23,7 @@ const p = tr.partners;
         </h1>
         <p class="mt-6 max-w-[479px] text-[18px] leading-[27px] text-white/90">{p.hero.sub}</p>
         <div class="mt-8">
-          <Button href="/contacts" variant="primary" size="lg">{p.hero.cta}</Button>
+          <Button modalTrigger="partners-hero" variant="primary" size="lg">{p.hero.cta}</Button>
         </div>
       </div>
       <div class="hidden lg:block">
@@ -122,12 +122,12 @@ const p = tr.partners;
         <h2 class="text-[40px] font-bold leading-[1.21] text-neutral-900 lg:text-[48px] lg:leading-[58px]">
           {p.path.title}
         </h2>
-        <Button href="/contacts" variant="secondary" size="md">{p.path.cta}</Button>
+        <Button modalTrigger="partners-path" variant="secondary" size="md">{p.path.cta}</Button>
       </div>
       <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
         {p.path.steps.map((step) => (
-          <div class="relative overflow-hidden rounded-[24px] bg-brand-blue p-10 text-white">
-            <span class="pointer-events-none absolute right-4 top-4 font-display text-[92px] font-semibold leading-none text-white/10 select-none">
+          <div class="process-step relative overflow-hidden rounded-[24px] bg-brand-blue p-10 text-white" data-process-step>
+            <span class="process-watermark pointer-events-none absolute right-4 top-4 font-display text-[92px] font-semibold leading-none select-none">
               {step.number}
             </span>
             <div class="mb-6 grid h-12 w-12 place-items-center rounded-full bg-white/10">

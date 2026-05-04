@@ -16,13 +16,14 @@ const navItems = [
 ---
 
 <header
-  class="sticky top-0 z-50 w-full border-b border-neutral-50 bg-white/95 backdrop-blur transition-colors duration-200"
+  class="sticky top-0 z-50 w-full border-b border-transparent bg-white/95 backdrop-blur transition-all duration-300 ease-out"
   data-header
+  data-header-state="default"
 >
   <div class="container-1280 flex h-[72px] items-center justify-between gap-4">
     <!-- Logo -->
     <a href={`${base}/`} class="flex items-center gap-2" aria-label="TreximAI homepage">
-      <span class="font-display text-[22px] font-bold tracking-tight text-neutral-900">
+      <span class="font-display text-[22px] font-bold tracking-tight text-neutral-900 transition-colors duration-300" data-logo-brand>
         Trexim<span class="text-brand-orange">AI</span>
       </span>
     </a>
@@ -48,44 +49,103 @@ const navItems = [
       <div class="flex items-center gap-1 text-[12px] font-medium">
         <a
           href={`${base}/`}
-          class="grid h-11 w-11 place-items-center rounded-full bg-white text-brand-orange ring-1 ring-neutral-200"
+          class="grid h-11 w-11 place-items-center rounded-full bg-white text-brand-orange ring-1 ring-neutral-200 transition-colors"
           aria-current="true"
+          data-lang-pill="active"
         >
           Укр
         </a>
         <a
           href={`${base}/en/`}
-          class="grid h-11 w-11 place-items-center rounded-full text-neutral-400 hover:text-brand-orange"
+          class="grid h-11 w-11 place-items-center rounded-full text-neutral-400 hover:text-brand-orange transition-colors"
+          data-lang-pill="inactive"
         >
           Eng
         </a>
       </div>
 
       <!-- Contact CTA -->
-      <a
-        href={`${base}/contacts`}
+      <button
+        type="button"
         class="hidden rounded border border-brand-orange px-4 py-2 text-[16px] font-medium text-brand-orange hover:bg-brand-orange hover:text-white sm:inline-block"
+        data-modal-trigger="header-cta"
       >
         {tr.nav.cta}
-      </a>
+      </button>
     </div>
   </div>
 </header>
 
 <script>
-  // Sticky scroll behavior — hide on scroll down past 200px, show on scroll up.
-  // On scroll past hero, header gets blue fill (per Figma annotation 162:29246).
+  // Sticky scroll behavior per Figma annotation 162:29246:
+  // - At top of page: default white bg, dark text
+  // - Scroll DOWN past 200px: hide (translate-y-full)
+  // - Scroll UP after scrolled past hero: reappear with brand-blue fill + white text
   let lastY = 0;
-  const header = document.querySelector("[data-header]") as HTMLElement | null;
+  const HERO_THRESHOLD = 240; // ~hero bottom
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  const navLinks = header?.querySelectorAll<HTMLAnchorElement>("nav a");
+  const langPills = header?.querySelectorAll<HTMLAnchorElement>("[data-lang-pill]");
+  const ctaBtn = header?.querySelector<HTMLButtonElement>("[data-modal-trigger='header-cta']");
+  const logoBrand = header?.querySelector<HTMLElement>("[data-logo-brand]");
+
+  function applyBlue(blueOn: boolean) {
+    if (!header) return;
+    if (blueOn) {
+      header.classList.add("bg-brand-blue", "border-b-white/10");
+      header.classList.remove("bg-white/95", "backdrop-blur", "border-transparent");
+      navLinks?.forEach((a) => {
+        if (!a.classList.contains("text-brand-orange")) {
+          a.classList.add("text-white");
+          a.classList.remove("text-neutral-900");
+        }
+      });
+      ctaBtn?.classList.add("text-white", "border-white");
+      ctaBtn?.classList.remove("text-brand-orange", "border-brand-orange");
+      logoBrand?.classList.add("text-white");
+      logoBrand?.classList.remove("text-neutral-900");
+    } else {
+      header.classList.remove("bg-brand-blue", "border-b-white/10");
+      header.classList.add("bg-white/95", "backdrop-blur", "border-transparent");
+      navLinks?.forEach((a) => {
+        if (!a.classList.contains("text-brand-orange")) {
+          a.classList.remove("text-white");
+          a.classList.add("text-neutral-900");
+        }
+      });
+      ctaBtn?.classList.remove("text-white", "border-white");
+      ctaBtn?.classList.add("text-brand-orange", "border-brand-orange");
+      logoBrand?.classList.remove("text-white");
+      logoBrand?.classList.add("text-neutral-900");
+    }
+  }
+
   if (header) {
     window.addEventListener("scroll", () => {
       const y = window.scrollY;
-      if (y > 200 && y > lastY) {
-        header.style.transform = "translateY(-100%)";
-      } else {
+      const scrollingUp = y < lastY;
+
+      if (y < 50) {
+        // Top — default
         header.style.transform = "translateY(0)";
+        applyBlue(false);
+        header.dataset.headerState = "default";
+      } else if (!scrollingUp && y > HERO_THRESHOLD) {
+        // Scroll down past hero — hide
+        header.style.transform = "translateY(-100%)";
+        header.dataset.headerState = "hidden";
+      } else if (scrollingUp && y > HERO_THRESHOLD) {
+        // Scroll up past hero — reappear with blue
+        header.style.transform = "translateY(0)";
+        applyBlue(true);
+        header.dataset.headerState = "blue";
+      } else {
+        // Within hero region — show but no blue yet
+        header.style.transform = "translateY(0)";
+        applyBlue(false);
+        header.dataset.headerState = "default";
       }
       lastY = y;
-    });
+    }, { passive: true });
   }
 </script>

@@ -1,0 +1,51 @@
+---
+import { t } from "../i18n/translations";
+
+const tr = t(Astro.currentLocale);
+const c = tr.cookie;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<aside
+  id="cookie-banner"
+  class="fixed bottom-4 left-4 right-4 z-[90] hidden max-w-[640px] rounded-[12px] border border-neutral-200 bg-white p-6 shadow-lg lg:left-6 lg:right-auto"
+  aria-live="polite"
+  data-cookie-banner
+>
+  <p class="text-[14px] leading-[20px] text-neutral-700">
+    {c.body}
+    <a href={`${base}/privacy`} class="text-brand-orange underline">{c.privacyLink}</a>
+  </p>
+  <div class="mt-4 flex flex-wrap gap-3">
+    <button
+      type="button"
+      class="rounded-[4px] bg-brand-orange px-6 py-2 text-[14px] font-medium text-white hover:bg-brand-orange-light"
+      data-cookie-accept
+    >
+      {c.accept}
+    </button>
+    <button
+      type="button"
+      class="rounded-[4px] border border-neutral-300 px-6 py-2 text-[14px] font-medium text-neutral-700 hover:border-brand-orange hover:text-brand-orange"
+      data-cookie-decline
+    >
+      {c.decline}
+    </button>
+  </div>
+</aside>
+
+<script>
+  const KEY = "trexim-cookie-decision";
+  const banner = document.querySelector<HTMLElement>("[data-cookie-banner]");
+  if (banner && !localStorage.getItem(KEY)) {
+    banner.classList.remove("hidden");
+  }
+  document.querySelector<HTMLButtonElement>("[data-cookie-accept]")?.addEventListener("click", () => {
+    localStorage.setItem(KEY, "accept");
+    banner?.classList.add("hidden");
+  });
+  document.querySelector<HTMLButtonElement>("[data-cookie-decline]")?.addEventListener("click", () => {
+    localStorage.setItem(KEY, "decline");
+    banner?.classList.add("hidden");
+  });
+</script>

@@ -43,7 +43,7 @@ const tabImages = {
           {tr.hero.sub}
         </p>
         <div class="mt-8">
-          <Button href="#contact" variant="primary" size="lg">
+          <Button modalTrigger="home-hero" variant="primary" size="lg">
             {tr.hero.cta}
           </Button>
         </div>
@@ -84,7 +84,7 @@ const tabImages = {
         ))}
         <!-- 5th cell: secondary CTA card -->
         <div class="flex items-center justify-center bg-white p-10">
-          <Button href="#contact" variant="secondary" size="md">
+          <Button modalTrigger="home-stats" variant="secondary" size="md">
             {tr.stats.cta}
           </Button>
         </div>
@@ -246,8 +246,8 @@ const tabImages = {
 
       <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
         {tr.process.steps.map((step) => (
-          <div class="relative overflow-hidden rounded-[24px] bg-brand-blue p-10 text-white">
-            <span class="pointer-events-none absolute right-4 top-4 font-display text-[92px] font-semibold leading-none text-white/10 select-none">
+          <div class="process-step relative overflow-hidden rounded-[24px] bg-brand-blue p-10 text-white" data-process-step>
+            <span class="process-watermark pointer-events-none absolute right-4 top-4 font-display text-[92px] font-semibold leading-none select-none">
               {step.number}
             </span>
             <div class="mb-6 grid h-12 w-12 place-items-center rounded-full bg-white/10">

@@ -4,6 +4,8 @@ import { site } from "../data/site";
 import { t } from "../i18n/translations";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import FormModal from "../components/FormModal.astro";
+import CookieBanner from "../components/CookieBanner.astro";
 
 interface Props {
   title?: string;
@@ -44,5 +46,29 @@ const seoDescription = description ?? site.seo.description;
       <slot />
     </main>
     <Footer />
+    <FormModal />
+    <CookieBanner />
+
+    <script>
+      // Process step fade-up animation on viewport entry (Home + Partners pages)
+      const steps = document.querySelectorAll<HTMLElement>("[data-process-step]");
+      if (steps.length > 0 && "IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("in-view");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.25, rootMargin: "0px 0px -60px 0px" },
+        );
+        steps.forEach((s) => observer.observe(s));
+      } else {
+        // Fallback: show all immediately
+        steps.forEach((s) => s.classList.add("in-view"));
+      }
+    </script>
   </body>
 </html>

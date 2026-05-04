@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../data/site";
+---
+
+<BaseLayout title="Політика конфіденційності — TreximAI">
+  <section class="bg-neutral-0 py-24">
+    <div class="container-1280 max-w-[760px]">
+      <h1 class="font-display text-[40px] font-bold leading-[1.21] text-neutral-900 lg:text-[48px] lg:leading-[58px]">
+        Політика конфіденційності
+      </h1>
+      <p class="mt-4 text-[14px] text-neutral-400">Останнє оновлення: 04.05.2026</p>
+
+      <div class="mt-12 space-y-8 text-[16px] leading-[26px] text-neutral-700">
+        <section>
+          <h2 class="text-[24px] font-semibold text-neutral-900">1. Загальні положення</h2>
+          <p class="mt-3">
+            Ця Політика конфіденційності описує, як TreximAI (далі — «ми», «нас», «наш») збирає,
+            використовує та захищає інформацію, отриману від користувачів сайту {site.domain}.
+          </p>
+        </section>
+        <section>
+          <h2 class="text-[24px] font-semibold text-neutral-900">2. Які дані ми збираємо</h2>
+          <p class="mt-3">
+            Через форми зворотного зв'язку: ім'я, номер телефону, email, код ЄДРПОУ/РНОКПП. Через cookies та аналітику:
+            знеособлена статистика відвідувань, технічні дані пристрою.
+          </p>
+        </section>
+        <section>
+          <h2 class="text-[24px] font-semibold text-neutral-900">3. Як ми використовуємо дані</h2>
+          <p class="mt-3">
+            Виключно для зв'язку з вами щодо вашого запиту, надсилання інформації про сервіс TreximAI та
+            покращення роботи сайту. Ми не передаємо ваші особисті дані третім сторонам.
+          </p>
+        </section>
+        <section>
+          <h2 class="text-[24px] font-semibold text-neutral-900">4. Cookies</h2>
+          <p class="mt-3">
+            Сайт використовує необхідні та аналітичні cookies. Ви можете відмовитися від необов'язкових
+            через банер при першому відвідуванні.
+          </p>
+        </section>
+        <section>
+          <h2 class="text-[24px] font-semibold text-neutral-900">5. Контакт</h2>
+          <p class="mt-3">
+            Питання щодо обробки персональних даних: <a href={`mailto:${site.email}`} class="text-brand-orange">{site.email}</a>
+          </p>
+        </section>
+
+        <p class="mt-12 rounded-[12px] border border-neutral-200 bg-neutral-50 p-4 text-[14px] italic text-neutral-500">
+          Це шаблонний текст для v1. Повну версію політики конфіденційності, яка відповідає Закону України
+          «Про захист персональних даних» №2297-VI та GDPR (для EU-відвідувачів), необхідно затвердити з юристом перед публічним запуском.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -6,6 +6,7 @@ interface Props {
   type?: "button" | "submit";
   class?: string;
   fullWidth?: boolean;
+  modalTrigger?: string; // when set → opens FormModal with `source` value
 }
 
 const {
@@ -15,6 +16,7 @@ const {
   type = "button",
   class: extraClass = "",
   fullWidth = false,
+  modalTrigger,
 } = Astro.props;
 
 const base =
@@ -34,7 +36,11 @@ const variants = {
 const cls = `${base} ${variants[variant]} ${fullWidth ? "w-full" : ""} ${extraClass}`;
 ---
 
-{href ? (
+{modalTrigger ? (
+  <button type="button" class={cls} data-modal-trigger={modalTrigger}>
+    <slot />
+  </button>
+) : href ? (
   <a href={href} class={cls}>
     <slot />
   </a>

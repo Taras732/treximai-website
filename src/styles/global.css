@@ -86,4 +86,81 @@ body {
   background: linear-gradient(180deg, #2F4A86 0%, #243764 100%);
 }
 
+/* ─── Animations ───────────────────────────────────────────────────────── */
+
+/* About vision reveal — waabi.ai-style word-by-word color shift driven by scroll position.
+   Uses modern animation-timeline (Chrome 115+, Edge 115+, Firefox 124+, Safari TP).
+   Falls back to plain dark text on older browsers. */
+.vision-reveal {
+  color: var(--color-neutral-900);
+}
+
+@supports (animation-timeline: view()) {
+  .vision-reveal {
+    background-image: linear-gradient(
+      to right,
+      var(--color-brand-orange) 0%,
+      var(--color-brand-orange) 35%,
+      var(--color-neutral-300) 65%,
+      var(--color-neutral-300) 100%
+    );
+    background-size: 250% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-position: 100% 0;
+    animation: vision-reveal linear;
+    animation-timeline: view();
+    animation-range: cover 20% cover 70%;
+  }
+  @keyframes vision-reveal {
+    to {
+      background-position: 0% 0;
+    }
+  }
+}
+
+/* Process steps fade-up + scale on enter viewport (used on Home + Partners). */
+.process-step {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.process-step.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* When a process step is in-view, its watermark number lights up orange */
+.process-step .process-watermark {
+  color: rgba(255, 255, 255, 0.08);
+  transition: color 0.6s ease-out;
+}
+.process-step.in-view .process-watermark {
+  color: rgba(233, 119, 26, 0.25);
+}
+
+/* Connector dots between process steps — visual rail between cards */
+.process-rail-dot {
+  background: var(--color-neutral-300);
+  transition: background-color 0.6s ease-out;
+}
+.process-rail-dot.in-view {
+  background: var(--color-brand-orange);
+}
+
+/* Honor user motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .vision-reveal,
+  .process-step,
+  .process-rail-dot {
+    transition: none !important;
+    animation: none !important;
+  }
+  .process-step {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Font fallback while local Montserrat loads. We pull Montserrat from Google Fonts in BaseLayout. */

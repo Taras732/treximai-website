@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../data/site";
+---
+
+<BaseLayout title="Умови використання — TreximAI">
+  <section class="bg-neutral-0 py-24">
+    <div class="container-1280 max-w-[760px]">
+      <h1 class="font-display text-[40px] font-bold leading-[1.21] text-neutral-900 lg:text-[48px] lg:leading-[58px]">
+        Умови використання
+      </h1>
+      <p class="mt-4 text-[14px] text-neutral-400">Останнє оновлення: 04.05.2026</p>
+
+      <div class="mt-12 space-y-8 text-[16px] leading-[26px] text-neutral-700">
+        <section>
+          <h2 class="text-[24px] font-semibold text-neutral-900">1. Прийняття умов</h2>
+          <p class="mt-3">
+            Використовуючи сайт {site.domain}, ви погоджуєтеся з цими Умовами. Якщо ви не згодні — будь ласка, не використовуйте сайт.
+          </p>
+        </section>
+        <section>
+          <h2 class="text-[24px] font-semibold text-neutral-900">2. Призначення сайту</h2>
+          <p class="mt-3">
+            Сайт презентує AI-платформу TreximAI для автомобільних логістичних перевезень в Україні. Сайт є інформаційним
+            ресурсом; для доступу до самої платформи зв'яжіться з нами через форму запиту.
+          </p>
+        </section>
+        <section>
+          <h2 class="text-[24px] font-semibold text-neutral-900">3. Інтелектуальна власність</h2>
+          <p class="mt-3">
+            Усі матеріали сайту (текст, дизайн, логотип, програмний код) є власністю TreximAI або використовуються за ліцензією.
+            Копіювання без письмової згоди заборонено.
+          </p>
+        </section>
+        <section>
+          <h2 class="text-[24px] font-semibold text-neutral-900">4. Обмеження відповідальності</h2>
+          <p class="mt-3">
+            Інформація надається «як є». Ми не несемо відповідальності за можливі прямі чи непрямі збитки, що виникли в
+            результаті використання інформації з сайту до моменту укладення формальної угоди про послуги.
+          </p>
+        </section>
+        <section>
+          <h2 class="text-[24px] font-semibold text-neutral-900">5. Контакт</h2>
+          <p class="mt-3">
+            Питання: <a href={`mailto:${site.email}`} class="text-brand-orange">{site.email}</a>
+          </p>
+        </section>
+
+        <p class="mt-12 rounded-[12px] border border-neutral-200 bg-neutral-50 p-4 text-[14px] italic text-neutral-500">
+          Це шаблонний текст для v1. Повну версію Умов використання, яка враховує специфіку TreximAI як SaaS-платформи,
+          необхідно затвердити з юристом перед публічним запуском.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

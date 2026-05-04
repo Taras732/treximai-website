@@ -22,7 +22,7 @@ const tf = tr.tariffs;
       </h1>
       <p class="mx-auto mt-6 max-w-[640px] text-[18px] leading-[27px] text-white/90">{tf.hero.sub}</p>
       <div class="mt-8">
-        <Button href="/contacts" variant="primary" size="lg">{tf.hero.cta}</Button>
+        <Button modalTrigger="tariffs-hero" variant="primary" size="lg">{tf.hero.cta}</Button>
       </div>
     </div>
   </section>
@@ -51,7 +51,7 @@ const tf = tr.tariffs;
           ))}
         </ul>
         <div class="mt-8">
-          <Button href="/contacts" variant="secondary" size="md">{tf.pilot.cta}</Button>
+          <Button modalTrigger="tariffs-pilot" variant="secondary" size="md">{tf.pilot.cta}</Button>
         </div>
       </div>
       <div>
@@ -98,7 +98,7 @@ const tf = tr.tariffs;
       </h2>
       <p class="mt-4 text-[16px] leading-[24px] text-neutral-500">{tf.limited.sub}</p>
       <div class="mt-6">
-        <Button href="/contacts" variant="primary" size="lg">{tf.limited.cta}</Button>
+        <Button modalTrigger="tariffs-limited" variant="primary" size="lg">{tf.limited.cta}</Button>
       </div>
       <ul class="mt-6 space-y-2 text-[12px] text-neutral-400">
         {tf.limited.notes.map((n) => <li>· {n}</li>)}
