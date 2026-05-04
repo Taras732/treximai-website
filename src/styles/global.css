@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+/* Brand tokens — sourced from Figma global.styles via figma-spec-desktop.md §1.1
+ * Tailwind v4 reads these as @theme to expose `bg-brand-blue`, `text-brand-orange`, etc.
+ */
+@theme {
+  /* Brand */
+  --color-brand-blue: #2F4A86;
+  --color-brand-blue-dark: #243764;
+  --color-brand-orange: #E9771A;
+  --color-brand-orange-light: #FF903E;
+
+  /* Neutrals */
+  --color-neutral-0: #FDFDFD;
+  --color-neutral-50: #F4F6F9;
+  --color-neutral-200: #D6DBE4;
+  --color-neutral-300: #CBD5E1;
+  --color-neutral-400: #A6AEC0;
+  --color-neutral-500: #5B6472;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #4E5C6E;
+  --color-neutral-900: #2B2F33;
+  --color-neutral-1000: #262626;
+
+  /* Semantic */
+  --color-error: #E9463D;
+  --color-success: #79C743;
+
+  /* Surfaces */
+  --color-surface-dark: #1B2335;
+
+  /* Typography */
+  --font-display: "Montserrat", system-ui, -apple-system, sans-serif;
+
+  /* Radius scale */
+  --radius-btn: 4px;
+  --radius-input: 10px;
+  --radius-stat: 16px;
+  --radius-card: 24px;
+  --radius-pill: 9999px;
+
+  /* Spacing scale (used by figma) — Tailwind already covers 4/8/16/24/32 etc.
+     Custom values that are non-standard: */
+  --spacing-section: 80px;
+  --spacing-section-lg: 120px;
+}
+
+/* Global resets and base styles */
+html {
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-display);
+  background: var(--color-neutral-0);
+  color: var(--color-neutral-900);
+  margin: 0;
+  font-feature-settings: "ss01", "ss02";
+}
+
+/* Container helper — frame width 1440 with 1280 content + 80px gutters per spec §5.6 */
+.container-1280 {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 80px;
+}
+
+@media (max-width: 1023px) {
+  .container-1280 {
+    padding-inline: 40px;
+  }
+}
+
+@media (max-width: 639px) {
+  .container-1280 {
+    padding-inline: 20px;
+  }
+}
+
+/* Hero gradient overlay reused on dark sections */
+.hero-blue-gradient {
+  background: linear-gradient(180deg, #2F4A86 0%, #243764 100%);
+}
+
+/* Font fallback while local Montserrat loads. We pull Montserrat from Google Fonts in BaseLayout. */

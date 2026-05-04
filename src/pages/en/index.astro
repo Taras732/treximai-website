@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Button from "../../components/Button.astro";
+import { enComingSoon } from "../../i18n/translations";
+
+const tr = enComingSoon;
+---
+
+<BaseLayout title="TreximAI — English version coming soon">
+  <section class="hero-blue-gradient flex min-h-[60vh] items-center text-white">
+    <div class="container-1280 text-center">
+      <h1 class="text-[40px] font-bold leading-[1.2] lg:text-[64px] lg:leading-[86px]">
+        {tr.title}
+      </h1>
+      <p class="mx-auto mt-6 max-w-[480px] text-[18px] leading-[27px] text-white/90">
+        {tr.sub}
+      </p>
+      <div class="mt-8">
+        <Button href="/" variant="primary" size="lg">{tr.cta}</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

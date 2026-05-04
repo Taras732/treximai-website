@@ -1,0 +1,5 @@
+---
+// UA explicit URL — redirect to root since UA is the default locale (no prefix).
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+return Astro.redirect(`${base}/`);
+---
