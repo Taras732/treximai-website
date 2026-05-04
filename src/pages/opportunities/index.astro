@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Button from "../../components/Button.astro";
+import BgVideo from "../../components/BgVideo.astro";
 import { t } from "../../i18n/translations";
 
 import heroGlass from "../../assets/images/opportunities/opp_hero_glass.svg";
@@ -27,6 +28,11 @@ const featureImages: Record<string, string> = {
 >
   {/* Hero */}
   <section class="hero-blue-gradient relative overflow-hidden text-white">
+    <!-- Background video (Freepik aerial sunset rural highway) — falls back to glass-effect SVG only -->
+    <div class="pointer-events-none absolute inset-0">
+      <BgVideo slug="opportunities-hero" poster={heroGlass.src} alt="" class="opacity-25" />
+      <div class="absolute inset-0 bg-gradient-to-b from-brand-blue/65 via-brand-blue/80 to-brand-blue-dark"></div>
+    </div>
     <img
       src={heroGlass.src}
       alt=""
@@ -43,30 +49,77 @@ const featureImages: Record<string, string> = {
     </div>
   </section>
 
-  {/* 4 Feature sections — alternating image side */}
-  {o.features.map((f, idx) => (
-    <section class={idx % 2 === 0 ? "bg-neutral-0 py-24" : "bg-neutral-50 py-24"}>
-      <div class="container-1280 grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        <div class={idx % 2 === 0 ? "" : "lg:order-2"}>
-          <img src={featureImages[f.key]} alt={f.title} class="rounded-[16px] shadow-sm" loading="lazy" />
-        </div>
-        <div class={idx % 2 === 0 ? "" : "lg:order-1"}>
-          <h2 class="text-[32px] font-semibold leading-[1.31] text-neutral-900 lg:text-[40px] lg:leading-[54px]">
-            {f.title}
-          </h2>
-          <p class="mt-4 text-[16px] leading-[24px] text-neutral-500">{f.body}</p>
-          <ul class="mt-6 space-y-3">
-            {f.bullets.map((b) => (
-              <li class="flex items-start gap-3 text-[16px] text-neutral-900">
-                <span class="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-brand-orange"></span>
-                <span>{b}</span>
-              </li>
-            ))}
-          </ul>
+  {/* 4 Feature sections — sticky-image scroll pattern per Figma annotation 414:15325
+       (https://www.all-forward.com/ reference). Left text scrolls normally; right
+       image stays sticky and cross-fades to match the article currently in viewport. */}
+  <section class="bg-neutral-0 py-24" data-sticky-features>
+    <div class="container-1280 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-start lg:gap-16">
+      <!-- Left: scrolling text articles -->
+      <div class="space-y-32 lg:space-y-48">
+        {o.features.map((f) => (
+          <article data-feature-text={f.key}>
+            <h2 class="text-[32px] font-semibold leading-[1.31] text-neutral-900 lg:text-[40px] lg:leading-[54px]">
+              {f.title}
+            </h2>
+            <p class="mt-4 text-[16px] leading-[24px] text-neutral-500">{f.body}</p>
+            <ul class="mt-6 space-y-3">
+              {f.bullets.map((b) => (
+                <li class="flex items-start gap-3 text-[16px] text-neutral-900">
+                  <span class="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-brand-orange"></span>
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+
+      <!-- Right: sticky image holder with cross-fade between feature panels -->
+      <div class="hidden lg:block">
+        <div class="sticky top-32 aspect-[4/3] overflow-hidden rounded-[16px] bg-neutral-50 shadow-sm" data-feature-image-holder>
+          {o.features.map((f, idx) => (
+            <img
+              src={featureImages[f.key]}
+              alt={f.title}
+              data-feature-image={f.key}
+              class={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${idx === 0 ? "opacity-100" : "opacity-0"}`}
+              loading={idx === 0 ? "eager" : "lazy"}
+            />
+          ))}
         </div>
       </div>
-    </section>
-  ))}
+
+      <!-- Mobile fallback: alternating images inline (sticky behavior would feel cramped) -->
+      <div class="contents lg:hidden">
+        {o.features.map((f) => (
+          <img src={featureImages[f.key]} alt={f.title} class="rounded-[16px] shadow-sm" loading="lazy" />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Cross-fade sticky image when the corresponding text article enters the viewport.
+    const articles = document.querySelectorAll<HTMLElement>("[data-feature-text]");
+    const images = document.querySelectorAll<HTMLImageElement>("[data-feature-image]");
+    if (articles.length > 0 && images.length > 0 && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          // Pick the entry closest to the middle of the viewport
+          const visible = entries.filter((e) => e.isIntersecting);
+          if (visible.length === 0) return;
+          const top = visible.reduce((a, b) => (a.intersectionRatio > b.intersectionRatio ? a : b));
+          const key = (top.target as HTMLElement).dataset.featureText;
+          images.forEach((img) => {
+            const match = img.dataset.featureImage === key;
+            img.style.opacity = match ? "1" : "0";
+          });
+        },
+        { rootMargin: "-30% 0px -40% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
+      );
+      articles.forEach((a) => observer.observe(a));
+    }
+  </script>
 
   {/* Extended capabilities */}
   <section class="bg-neutral-0 py-24">

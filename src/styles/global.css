@@ -149,11 +149,109 @@ body {
   background: var(--color-brand-orange);
 }
 
+/* Cursor-following orange blur orb on Home hero (per Figma sticky 309:14171,
+   codepen ian34/abgzZMm reference). Single absolute-positioned div appended by
+   the layout script (BaseLayout). Mix-blend-mode = screen for additive feel. */
+.cursor-blur-orb {
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(235, 114, 15, 0.55), rgba(235, 114, 15, 0));
+  filter: blur(80px);
+  mix-blend-mode: screen;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 30%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  will-change: transform, opacity;
+  z-index: 1;
+}
+.cursor-blur-orb.active {
+  opacity: 1;
+}
+
+/* Reduced-motion fallback: ambient slow drift (no cursor follow). */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-blur-orb {
+    transition: none !important;
+    animation: ambient-drift 18s ease-in-out infinite alternate;
+  }
+  @keyframes ambient-drift {
+    0% { transform: translate(-50%, -50%) translate(-100px, 0); }
+    100% { transform: translate(-50%, -50%) translate(100px, 40px); }
+  }
+}
+
+/* Process connector rail — horizontal line between 3 cards (Home + Partners).
+   Gray default; fills orange progressively as IntersectionObserver activates each step. */
+.process-grid {
+  position: relative;
+}
+.process-rail {
+  position: absolute;
+  top: 24px;
+  left: 12%;
+  right: 12%;
+  height: 3px;
+  background: var(--color-neutral-200);
+  z-index: 0;
+}
+.process-rail::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: var(--rail-fill, 0%);
+  background: linear-gradient(90deg, var(--color-brand-orange) 0%, var(--color-brand-orange-light) 100%);
+  transition: width 0.6s ease;
+}
+
+/* About: horizontal-scroll TREXIM wordmark (per Figma sticky 487:2698, czfirearms BREN-2 ref).
+   The composite [icon | wordmark] sits behind the section; on scroll the icon exits left
+   and the wordmark settles centered. Driven by JS that updates --tx via scroll progress. */
+.about-wordmark-scroller {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.about-wordmark-scroller .wordmark-row {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  white-space: nowrap;
+  transform: translateX(var(--tx, 0%));
+  will-change: transform;
+}
+.about-wordmark-scroller .wordmark-icon {
+  width: 220px;
+  height: 220px;
+  flex-shrink: 0;
+  opacity: 0.06;
+}
+.about-wordmark-scroller .wordmark-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(180px, 26vw, 380px);
+  line-height: 1;
+  color: var(--color-neutral-200);
+  letter-spacing: -0.04em;
+}
+
 /* Honor user motion preference */
 @media (prefers-reduced-motion: reduce) {
   .vision-reveal,
   .process-step,
-  .process-rail-dot {
+  .process-rail-dot,
+  .process-rail::after,
+  .about-wordmark-scroller .wordmark-row {
     transition: none !important;
     animation: none !important;
   }

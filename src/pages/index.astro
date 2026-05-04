@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Button from "../components/Button.astro";
+import BgVideo from "../components/BgVideo.astro";
 import { t } from "../i18n/translations";
 import { site } from "../data/site";
 
@@ -25,7 +26,13 @@ const tabImages = {
 
 <BaseLayout>
   {/* ======================== HERO ======================== */}
-  <section class="hero-blue-gradient relative overflow-hidden text-white">
+  <section class="hero-blue-gradient relative overflow-hidden text-white" data-cursor-blur-host>
+    <!-- Background video (Freepik aerial highway) — falls back to poster image if mp4 missing -->
+    <div class="pointer-events-none absolute inset-0">
+      <BgVideo slug="home-hero" poster={heroImg.src} alt="" class="opacity-30" />
+      <div class="absolute inset-0 bg-gradient-to-b from-brand-blue/60 via-brand-blue/80 to-brand-blue-dark"></div>
+    </div>
+    <!-- Cursor-following blur orb (orange glow). JS attaches a div on mount -->
     <!-- Decorative SVG icon top-left -->
     <img
       src={heroIcon.src}
@@ -195,7 +202,9 @@ const tabImages = {
 
       <!-- Block 1: shippers -->
       <div class="mt-16 grid grid-cols-1 gap-15 lg:grid-cols-2 lg:items-center">
-        <div class="aspect-video rounded-[16px] bg-gradient-to-br from-brand-blue to-brand-blue-dark"></div>
+        <div class="aspect-video overflow-hidden rounded-[16px] bg-brand-blue-dark">
+          <BgVideo slug="home-audience-shippers" poster={heroImg.src} alt="Перевезення вантажу" />
+        </div>
         <div>
           <h3 class="text-[28px] font-semibold leading-[1.31] text-neutral-900 lg:text-[32px] lg:leading-[42px]">
             {tr.audience.shippers.h3}
@@ -216,7 +225,9 @@ const tabImages = {
 
       <!-- Block 2: logistics companies -->
       <div class="mt-16 grid grid-cols-1 gap-15 lg:grid-cols-2 lg:items-center">
-        <div class="order-1 lg:order-2 aspect-video rounded-[16px] bg-gradient-to-br from-brand-blue-dark to-brand-blue"></div>
+        <div class="order-1 lg:order-2 aspect-video overflow-hidden rounded-[16px] bg-brand-blue-dark">
+          <BgVideo slug="home-audience-logistics" poster={heroImg.src} alt="Логістична компанія" />
+        </div>
         <div class="order-2 lg:order-1">
           <h3 class="text-[28px] font-semibold leading-[1.31] text-neutral-900 lg:text-[32px] lg:leading-[42px]">
             {tr.audience.logistics.h3}
@@ -244,7 +255,8 @@ const tabImages = {
         {tr.process.title}
       </h2>
 
-      <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div class="process-grid relative mt-12 grid grid-cols-1 gap-6 md:grid-cols-3" data-process-grid>
+        <div class="process-rail hidden md:block"></div>
         {tr.process.steps.map((step) => (
           <div class="process-step relative overflow-hidden rounded-[24px] bg-brand-blue p-10 text-white" data-process-step>
             <span class="process-watermark pointer-events-none absolute right-4 top-4 font-display text-[92px] font-semibold leading-none select-none">

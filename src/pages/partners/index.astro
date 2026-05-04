@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Button from "../../components/Button.astro";
+import BgVideo from "../../components/BgVideo.astro";
 import { t } from "../../i18n/translations";
 
 import heroImg from "../../assets/images/partners/partners_hero.png";
@@ -94,8 +95,12 @@ const p = tr.partners;
             ))}
           </div>
           <p class="mt-4 text-[12px] italic text-neutral-400">{p.market.footnote}</p>
-          <div class="mt-8">
-            <img src={graphImg.src} alt="Market metrics graph" class="block w-full max-w-[640px]" loading="lazy" />
+          <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-[1fr_320px]">
+            <img src={graphImg.src} alt="Market metrics graph" class="block w-full" loading="lazy" />
+            <!-- Video Project 6 1 slot per Figma — looped trucks-on-highway -->
+            <div class="aspect-[4/3] overflow-hidden rounded-[16px] bg-brand-blue-dark md:aspect-auto">
+              <BgVideo slug="partners-market" poster={heroImg.src} alt="Транспорт на маршруті" />
+            </div>
           </div>
         </div>
         <!-- Side stats -->
@@ -124,7 +129,8 @@ const p = tr.partners;
         </h2>
         <Button modalTrigger="partners-path" variant="secondary" size="md">{p.path.cta}</Button>
       </div>
-      <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div class="process-grid relative mt-12 grid grid-cols-1 gap-6 md:grid-cols-3" data-process-grid>
+        <div class="process-rail hidden md:block"></div>
         {p.path.steps.map((step) => (
           <div class="process-step relative overflow-hidden rounded-[24px] bg-brand-blue p-10 text-white" data-process-step>
             <span class="process-watermark pointer-events-none absolute right-4 top-4 font-display text-[92px] font-semibold leading-none select-none">

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Button from "../../components/Button.astro";
+import BgVideo from "../../components/BgVideo.astro";
 import { t } from "../../i18n/translations";
 
 import pilotImg from "../../assets/images/tariffs/tariffs_pilot.png";
@@ -54,8 +55,16 @@ const tf = tr.tariffs;
           <Button modalTrigger="tariffs-pilot" variant="secondary" size="md">{tf.pilot.cta}</Button>
         </div>
       </div>
-      <div>
-        <img src={pilotImg.src} alt="Pilot program preview" class="rounded-[16px]" loading="lazy" />
+      <!-- Macbook frame mockup — video plays inside (Freepik warehouse-inventory-scanning) -->
+      <div class="overflow-hidden rounded-[16px] bg-brand-blue-dark/95 p-3 shadow-lg">
+        <div class="mb-2 flex items-center gap-2 px-2 py-1">
+          <span class="block h-2 w-2 rounded-full bg-[#D8695B]"></span>
+          <span class="block h-2 w-2 rounded-full bg-[#EAC213]"></span>
+          <span class="block h-2 w-2 rounded-full bg-[#79C743]"></span>
+        </div>
+        <div class="aspect-video overflow-hidden rounded-[10px] bg-black">
+          <BgVideo slug="tariffs-pilot" poster={pilotImg.src} alt="Пілотна програма Trexim" />
+        </div>
       </div>
     </div>
   </section>

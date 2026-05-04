@@ -50,24 +50,101 @@ const seoDescription = description ?? site.seo.description;
     <CookieBanner />
 
     <script>
-      // Process step fade-up animation on viewport entry (Home + Partners pages)
+      // ─── Process step fade-up + connector-rail orange fill ─────────────────
+      // Used on Home + Partners. Per Figma annotation 162:29251.
       const steps = document.querySelectorAll<HTMLElement>("[data-process-step]");
+      const grids = document.querySelectorAll<HTMLElement>("[data-process-grid]");
+
       if (steps.length > 0 && "IntersectionObserver" in window) {
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 entry.target.classList.add("in-view");
+                // Recompute rail fill: % of activated steps in the same grid
+                const grid = entry.target.closest<HTMLElement>("[data-process-grid]");
+                if (grid) {
+                  const all = grid.querySelectorAll<HTMLElement>("[data-process-step]");
+                  const active = grid.querySelectorAll<HTMLElement>("[data-process-step].in-view");
+                  const ratio = (active.length / all.length) * 100;
+                  grid.style.setProperty("--rail-fill", `${ratio}%`);
+                }
                 observer.unobserve(entry.target);
               }
             });
           },
-          { threshold: 0.25, rootMargin: "0px 0px -60px 0px" },
+          { threshold: 0.35, rootMargin: "0px 0px -60px 0px" },
         );
         steps.forEach((s) => observer.observe(s));
       } else {
-        // Fallback: show all immediately
         steps.forEach((s) => s.classList.add("in-view"));
+        grids.forEach((g) => g.style.setProperty("--rail-fill", "100%"));
+      }
+
+      // ─── Cursor-following orange blur orb (Home hero per Figma 309:14171) ───
+      const blurHosts = document.querySelectorAll<HTMLElement>("[data-cursor-blur-host]");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      blurHosts.forEach((host) => {
+        if (getComputedStyle(host).position === "static") host.style.position = "relative";
+        const orb = document.createElement("div");
+        orb.className = "cursor-blur-orb";
+        host.appendChild(orb);
+        if (reducedMotion) {
+          orb.classList.add("active");
+          return; // CSS keyframes handle ambient drift
+        }
+        let mouseX = host.offsetWidth / 2;
+        let mouseY = host.offsetHeight / 2;
+        let orbX = mouseX;
+        let orbY = mouseY;
+        let active = false;
+        host.addEventListener("mouseenter", () => {
+          active = true;
+          orb.classList.add("active");
+        });
+        host.addEventListener("mouseleave", () => {
+          active = false;
+          orb.classList.remove("active");
+        });
+        host.addEventListener("mousemove", (e) => {
+          const rect = host.getBoundingClientRect();
+          mouseX = e.clientX - rect.left;
+          mouseY = e.clientY - rect.top;
+        });
+        function tick() {
+          // Eased lag — orb trails cursor by ~150ms per Figma annotation
+          orbX += (mouseX - orbX) * 0.06;
+          orbY += (mouseY - orbY) * 0.06;
+          orb.style.left = `${orbX}px`;
+          orb.style.top = `${orbY}px`;
+          requestAnimationFrame(tick);
+        }
+        tick();
+      });
+
+      // ─── About: TREXIM wordmark horizontal scroll (per Figma 487:2698) ──────
+      const scrollers = document.querySelectorAll<HTMLElement>("[data-wordmark-scroller]");
+      if (scrollers.length > 0) {
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (!reduced) {
+          window.addEventListener(
+            "scroll",
+            () => {
+              scrollers.forEach((scroller) => {
+                const rect = scroller.getBoundingClientRect();
+                const winH = window.innerHeight;
+                // Progress 0 → 1 across the section's pin range
+                const start = winH;
+                const end = -rect.height;
+                const range = start - end;
+                const progress = Math.max(0, Math.min(1, (start - rect.top) / range));
+                // Translate from 0% (icon visible at left) → -40% (icon out, wordmark centered)
+                scroller.style.setProperty("--tx", `${-progress * 40}%`);
+              });
+            },
+            { passive: true },
+          );
+        }
       }
     </script>
   </body>
