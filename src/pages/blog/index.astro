@@ -1,0 +1,153 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { t } from "../../i18n/translations";
+import { articles } from "../../data/articles";
+
+const tr = t(Astro.currentLocale);
+const b = tr.blog;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+// Newest first
+const sorted = [...articles].sort((a, b) => +new Date(b.date) - +new Date(a.date));
+---
+
+<BaseLayout
+  title="Блог — TreximAI"
+  description="Аналітика, тренди та практичні розбори ринку логістики від команди TreximAI."
+>
+  {/* Hero */}
+  <section class="hero-blue-gradient text-white">
+    <div class="container-1280 max-w-[860px] py-24 lg:py-32">
+      <h1 class="font-display text-[40px] font-bold leading-[1.2] sm:text-[56px] lg:text-[64px] lg:leading-[86px]">
+        {b.title}
+      </h1>
+      <p class="mt-6 max-w-[640px] text-[18px] leading-[27px] text-white/90">{b.sub}</p>
+    </div>
+  </section>
+
+  {/* Search + tag filter */}
+  <section class="border-b border-neutral-200 bg-neutral-0 py-10">
+    <div class="container-1280">
+      <div class="flex flex-wrap items-center gap-4">
+        <input
+          type="search"
+          data-blog-search
+          placeholder={b.searchPlaceholder}
+          class="w-full max-w-[400px] rounded-[10px] border border-neutral-300 px-4 py-3 text-[16px] focus:border-brand-orange focus:outline-none"
+        />
+      </div>
+      <div class="mt-6 flex flex-wrap gap-2" data-blog-tags>
+        <button
+          type="button"
+          class="rounded-full border border-brand-orange bg-brand-orange px-4 py-1.5 text-[14px] font-medium text-white"
+          data-tag-all
+          data-active="true"
+        >
+          {b.allTags}
+        </button>
+        {b.tags.map((tag) => (
+          <button
+            type="button"
+            class="rounded-full border border-neutral-300 px-4 py-1.5 text-[14px] font-medium text-neutral-600 hover:border-brand-orange hover:text-brand-orange"
+            data-tag={tag}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Articles list */}
+  <section class="bg-neutral-0 py-16">
+    <div class="container-1280">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" data-articles>
+        {sorted.map((a) => (
+          <article
+            class="overflow-hidden rounded-[16px] border border-neutral-200 bg-white transition-shadow hover:shadow-md"
+            data-article
+            data-tags={a.tags.join(",")}
+            data-search={`${a.title} ${a.excerpt} ${a.tags.join(" ")}`.toLowerCase()}
+          >
+            <a href={`${base}/blog/${a.slug}`} class="block">
+              <div class="aspect-video bg-gradient-to-br from-brand-blue to-brand-blue-dark"></div>
+              <div class="p-6">
+                <p class="text-[12px] uppercase tracking-wide text-neutral-400">{a.dateLabel}</p>
+                <h2 class="mt-2 text-[20px] font-semibold leading-[1.4] text-neutral-900">{a.title}</h2>
+                <p class="mt-3 line-clamp-3 text-[14px] leading-[20px] text-neutral-500">{a.excerpt}</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  {a.tags.map((tag) => (
+                    <span class="rounded-full bg-neutral-50 px-3 py-1 text-[12px] text-neutral-600">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+      <p class="mt-8 hidden text-center text-[16px] text-neutral-500" data-empty>{b.empty}</p>
+
+      {/* Pagination shell — non-functional in v1, shows current state only */}
+      <nav class="mt-12 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination">
+        <button class="rounded border border-neutral-300 px-4 py-2 text-[14px] text-neutral-500 hover:border-brand-orange hover:text-brand-orange" disabled>
+          {b.pagination.prev}
+        </button>
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((n) => (
+          <button class={n === 1
+            ? "rounded border border-brand-orange bg-brand-orange px-4 py-2 text-[14px] font-medium text-white"
+            : "rounded border border-neutral-300 px-4 py-2 text-[14px] text-neutral-600 hover:border-brand-orange hover:text-brand-orange"}>
+            {n}
+          </button>
+        ))}
+        <button class="rounded border border-neutral-300 px-4 py-2 text-[14px] text-neutral-700 hover:border-brand-orange hover:text-brand-orange">
+          {b.pagination.next}
+        </button>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Search + tag filter — pure-DOM, no framework
+  const searchEl = document.querySelector<HTMLInputElement>("[data-blog-search]");
+  const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-article]"));
+  const tagButtons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-blog-tags] button"));
+  const emptyMsg = document.querySelector<HTMLElement>("[data-empty]");
+
+  let activeTag: string | null = null;
+  let query = "";
+
+  function apply() {
+    let visible = 0;
+    cards.forEach((card) => {
+      const tags = (card.getAttribute("data-tags") || "").toLowerCase();
+      const search = card.getAttribute("data-search") || "";
+      const matchesTag = !activeTag || tags.includes(activeTag.toLowerCase());
+      const matchesQuery = !query || search.includes(query);
+      const show = matchesTag && matchesQuery;
+      card.style.display = show ? "" : "none";
+      if (show) visible++;
+    });
+    if (emptyMsg) emptyMsg.classList.toggle("hidden", visible > 0);
+  }
+
+  searchEl?.addEventListener("input", () => {
+    query = (searchEl.value || "").toLowerCase().trim();
+    apply();
+  });
+
+  tagButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      tagButtons.forEach((b) => {
+        b.dataset.active = "false";
+        b.classList.remove("border-brand-orange", "bg-brand-orange", "text-white");
+        b.classList.add("border-neutral-300", "text-neutral-600");
+      });
+      btn.dataset.active = "true";
+      btn.classList.add("border-brand-orange", "bg-brand-orange", "text-white");
+      btn.classList.remove("border-neutral-300", "text-neutral-600");
+      activeTag = btn.hasAttribute("data-tag-all") ? null : btn.getAttribute("data-tag");
+      apply();
+    });
+  });
+</script>
