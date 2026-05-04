@@ -1,0 +1,108 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Button from "../../components/Button.astro";
+import { t } from "../../i18n/translations";
+
+import pilotImg from "../../assets/images/tariffs/tariffs_pilot.png";
+import ctaImg from "../../assets/images/tariffs/tariffs_cta.png";
+
+const tr = t(Astro.currentLocale);
+const tf = tr.tariffs;
+---
+
+<BaseLayout
+  title="Тарифи — TreximAI"
+  description="Пілотна програма 2026 — безкоштовний доступ до повного функціоналу AI-платформи Trexim для логістики."
+>
+  {/* Hero */}
+  <section class="hero-blue-gradient relative overflow-hidden text-white">
+    <div class="container-1280 relative max-w-[860px] py-32 text-center lg:py-40">
+      <h1 class="font-display text-[40px] font-bold leading-[1.2] sm:text-[56px] lg:text-[64px] lg:leading-[86px]">
+        {tf.hero.h1}
+      </h1>
+      <p class="mx-auto mt-6 max-w-[640px] text-[18px] leading-[27px] text-white/90">{tf.hero.sub}</p>
+      <div class="mt-8">
+        <Button href="/contacts" variant="primary" size="lg">{tf.hero.cta}</Button>
+      </div>
+    </div>
+  </section>
+
+  {/* Pilot program */}
+  <section class="bg-neutral-0 py-24">
+    <div class="container-1280 grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <span class="inline-block rounded-full border border-brand-orange px-4 py-1.5 text-[14px] font-medium text-brand-orange">
+          {tf.pilot.chip}
+        </span>
+        <h2 class="mt-6 text-[40px] font-bold leading-[1.21] text-neutral-900 lg:text-[48px] lg:leading-[58px]">
+          {tf.pilot.title}
+        </h2>
+        <p class="mt-4 text-[16px] leading-[24px] text-neutral-500">{tf.pilot.sub}</p>
+        <ul class="mt-8 space-y-4">
+          {tf.pilot.items.map((it) => (
+            <li class="flex items-start gap-3">
+              <span class="mt-1 inline-block h-5 w-5 flex-shrink-0 rounded-full bg-brand-orange/20">
+                <svg viewBox="0 0 20 20" fill="none" stroke="#E9771A" stroke-width="2" class="h-full w-full p-0.5">
+                  <path d="M5 10l3 3 7-7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <span class="text-[18px] leading-[27px] text-neutral-900">{it}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-8">
+          <Button href="/contacts" variant="secondary" size="md">{tf.pilot.cta}</Button>
+        </div>
+      </div>
+      <div>
+        <img src={pilotImg.src} alt="Pilot program preview" class="rounded-[16px]" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  {/* Future pricing model — dark */}
+  <section class="bg-brand-blue-dark py-24 text-white">
+    <div class="container-1280 grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.2fr]">
+      <div>
+        <h2 class="text-[40px] font-bold leading-[1.21] lg:text-[48px] lg:leading-[58px]">{tf.future.title}</h2>
+        <p class="mt-4 max-w-[480px] text-[16px] leading-[24px] text-neutral-50/90 whitespace-pre-line">
+          {tf.future.sub}
+        </p>
+      </div>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        {tf.future.cards.map((c) => (
+          <div class="rounded-[16px] bg-white/5 p-6 ring-1 ring-white/10">
+            <div class="mb-4 grid h-12 w-12 place-items-center rounded-full bg-brand-orange/20">
+              <span class="block h-5 w-5 rounded bg-brand-orange"></span>
+            </div>
+            <h3 class="text-[18px] font-semibold leading-[1.4]">{c.title}</h3>
+            <p class="mt-2 text-[14px] leading-[20px] text-white/80">{c.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Limited group CTA */}
+  <section
+    class="relative overflow-hidden bg-neutral-50 py-24"
+    style={`background-image: url(${ctaImg.src}); background-size: cover; background-position: right center;`}
+  >
+    <div class="absolute inset-0 bg-white/85 lg:bg-gradient-to-r lg:from-white lg:via-white/80 lg:to-transparent"></div>
+    <div class="container-1280 relative max-w-[700px]">
+      <span class="inline-block rounded-full border border-brand-orange px-4 py-1.5 text-[14px] font-medium text-brand-orange">
+        {tf.limited.chip}
+      </span>
+      <h2 class="mt-6 text-[28px] font-semibold leading-[1.31] text-neutral-900 lg:text-[32px] lg:leading-[42px]">
+        {tf.limited.title}
+      </h2>
+      <p class="mt-4 text-[16px] leading-[24px] text-neutral-500">{tf.limited.sub}</p>
+      <div class="mt-6">
+        <Button href="/contacts" variant="primary" size="lg">{tf.limited.cta}</Button>
+      </div>
+      <ul class="mt-6 space-y-2 text-[12px] text-neutral-400">
+        {tf.limited.notes.map((n) => <li>· {n}</li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/Button.astro";
+import { t } from "../i18n/translations";
+
+const tr = t(Astro.currentLocale);
+const nf = tr.notFound;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout title="Сторінку не знайдено — TreximAI">
+  <section class="hero-blue-gradient flex min-h-[70vh] items-center text-white">
+    <div class="container-1280 text-center">
+      <p class="font-display text-[120px] font-semibold leading-none lg:text-[180px]">404</p>
+      <h1 class="mt-4 font-display text-[40px] font-bold leading-[1.2] lg:text-[48px]">{nf.h1}</h1>
+      <p class="mx-auto mt-6 max-w-[480px] text-[18px] leading-[27px] text-white/90">{nf.body}</p>
+      <div class="mt-8">
+        <Button href={`${base}/`} variant="primary" size="lg">{nf.cta}</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
