@@ -1,19 +1,15 @@
 ---
 /**
- * Reusable looped background video component.
- *
- * Drops a `<video autoplay muted loop playsinline>` with sources for `.webm` and `.mp4`.
- * If neither file exists in /public/videos/, the `poster` image is shown as the static
- * fallback (so the site never breaks while Тарас is still uploading the Freepik clips).
- *
- * Browsers that respect `prefers-reduced-motion: reduce` skip autoplay (handled in CSS).
+ * Reusable looped background video. Renders <video autoplay muted loop playsinline>.
+ * Looks up files in /public/videos/<slug>.{webm,mp4}; falls back to poster image
+ * if neither plays. prefers-reduced-motion users see the poster.
  */
 interface Props {
-  slug: string;          // file basename, e.g. "home-hero" → /videos/home-hero.mp4
-  poster: string;        // resolved image src for fallback (e.g. heroImg.src)
+  slug: string;
+  poster: string;
   alt?: string;
   class?: string;
-  objectPosition?: string; // CSS object-position value (default "center")
+  objectPosition?: string;
 }
 
 const { slug, poster, alt = "", class: extraClass = "", objectPosition = "center" } = Astro.props;
